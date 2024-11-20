@@ -79,18 +79,23 @@ export default {
       this.inputLanguages = shuffled.slice(0, 2);
       this.displayLanguage = shuffled[2];
     },
+    
     onSubmit() {
-      const correct = this.inputLanguages.every(
-        (lang) => this[lang] === this.currWord[lang]
-      );
+    const correct = this.inputLanguages.every(
+      (lang) => this[lang] === this.currWord[lang]
+    );
 
-      if (correct) {
-        this.flash('Correct!', 'success', { timeout: 1000 });
-        this.score += 1;
-      } else {
-        this.flash('Wrong!', 'error', { timeout: 1000 });
-        this.incorrectGuesses.push(this.currWord[this.displayLanguage]);
-      }
+    if (correct) {
+      this.flash('Correct!', 'success', { timeout: 1000 });
+      this.score += 1;
+    } else {
+      this.flash('Wrong!', 'error', { timeout: 1000 });
+      this.inputLanguages.forEach((lang) => {
+        if (this[lang] !== this.currWord[lang]) {
+          this.incorrectGuesses.push(this.currWord[lang]);
+        }
+      });
+    }    
 
       this.english = '';
       this.german = '';
