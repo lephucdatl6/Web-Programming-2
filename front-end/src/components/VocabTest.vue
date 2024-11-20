@@ -3,6 +3,7 @@
     <h2>Score: {{ score }} out of {{ this.words.length }}</h2>
 
     <form action="#" @submit.prevent="onSubmit">
+      <!-- Display Field for the Selected Language -->
       <div v-if="inputLanguages.includes('english')" class="ui labeled input fluid">
         <div class="ui label">
           <i class="united kingdom flag"></i> English
@@ -71,7 +72,7 @@ export default {
     }
   },
 
-  // Randomize the selection of two input languages and one display language each time it call
+  // Randomize 2 input languages and 1 display lanuage
   methods: {
     shuffleLanguages() {
       const languages = ['english', 'german', 'russian'];
@@ -79,7 +80,6 @@ export default {
       this.inputLanguages = shuffled.slice(0, 2);
       this.displayLanguage = shuffled[2];
     },
-    
     onSubmit() {
     const correct = this.inputLanguages.every(
       (lang) => this[lang] === this.currWord[lang]
@@ -101,9 +101,7 @@ export default {
       this.german = '';
       this.russian = '';
       this.randWords.shift();
-
-      this.shuffleLanguages();   // Shuffle languages for the next question
-
+      this.shuffleLanguages();
       if (this.randWords.length === 0) {
         this.testOver = true;
         this.displayResults();
