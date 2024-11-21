@@ -1,36 +1,32 @@
 <template>
   <div>
+    <h1>Test {{ testNumber }}</h1>
+
     <h2>Score: {{ score }} out of {{ this.words.length }}</h2>
 
     <form action="#" @submit.prevent="onSubmit">
-      <!-- Display Field for the Selected Language -->
-      <div v-if="inputLanguages.includes('english')" class="ui labeled input fluid">
+      <div class="ui labeled input fluid">
         <div class="ui label">
           <i class="united kingdom flag"></i> English
         </div>
-        <input type="text" placeholder="Enter English word..." v-model="english" :disabled="testOver" autocomplete="off" />
+        <input v-if="testLanguages.includes('english')" type="text" placeholder="Enter word..." v-model="english" :disabled="testOver" autocomplete="off" />
+        <input v-else type="text" readonly :disabled="testOver" :value="currWord.english"/>
       </div>
 
-      <div v-if="inputLanguages.includes('german')" class="ui labeled input fluid">
+      <div class="ui labeled input fluid">
         <div class="ui label">
           <i class="germany flag"></i> German
         </div>
-        <input type="text" placeholder="Enter German word..." v-model="german" :disabled="testOver" autocomplete="off" />
+        <input v-if="testLanguages.includes('german')" type="text" placeholder="Enter word..." v-model="german" :disabled="testOver" autocomplete="off" />
+        <input v-else type="text" readonly :disabled="testOver" :value="currWord.german"/>
       </div>
-
-      <div v-if="inputLanguages.includes('russian')" class="ui labeled input fluid">
+      
+      <div class="ui labeled input fluid">
         <div class="ui label">
           <i class="ru flag"></i> Russian
         </div>
-        <input type="text" placeholder="Enter Russian word..." v-model="russian" :disabled="testOver" autocomplete="off" />
-      </div>
-
-      <!-- Display Field for the Non-Selected Language -->
-      <div class="ui labeled input fluid">
-        <div class="ui label">
-          <i :class="flagClass(displayLanguage)"></i> {{ capitalize(displayLanguage) }}
-        </div>
-        <input type="text" :value="currWord[displayLanguage]" readonly :disabled="testOver" />
+        <input v-if="testLanguages.includes('russian')" type="text" placeholder="Enter word..." v-model="russian" :disabled="testOver" autocomplete="off" />
+        <input v-else type="text" readonly :disabled="testOver" :value="currWord.russian"/>
       </div>
 
       <button class="positive ui button" :disabled="testOver">Submit</button>
@@ -62,8 +58,8 @@ export default {
       russian: '',
       score: 0,
       testOver: false,
-      inputLanguages: [],
-      displayLanguage: ''
+      testLanguages: [],
+      testNumber: 1
     };
   },
   computed: {
@@ -71,40 +67,32 @@ export default {
       return this.randWords.length ? this.randWords[0] : '';
     }
   },
-
-  // Randomize 2 input languages and 1 display lanuage
   methods: {
-    shuffleLanguages() {
-      const languages = ['english', 'german', 'russian'];
-      const shuffled = languages.sort(() => 0.5 - Math.random());
-      this.inputLanguages = shuffled.slice(0, 2);
-      this.displayLanguage = shuffled[2];
-    },
     onSubmit() {
-    const correct = this.inputLanguages.every(
-      (lang) => this[lang] === this.currWord[lang]
-    );
-
-    if (correct) {
-      this.flash('Correct!', 'success', { timeout: 1000 });
-      this.score += 1;
-    } else {
-      this.flash('Wrong!', 'error', { timeout: 1000 });
-      this.inputLanguages.forEach((lang) => {
-        if (this[lang] !== this.currWord[lang]) {
-          this.incorrectGuesses.push(this.currWord[lang]);
-        }
-      });
-    }    
+      const correct = this.testLanguages.every(lang => this[lang] === this.currWord[lang]);
+      if (correct) {
+        this.flash('Correct!', 'success', { timeout: 1000 });
+        this.score += 1;
+      } else {
+        this.flash('Wrong!', 'error', { timeout: 1000 });
+        this.incorrectGuesses.push({
+          testNumber: this.testNumber,
+          word: this.currWord,
+          incorrectInputs: this.testLanguages.filter(lang => this[lang] !== this.currWord[lang])
+        });
+      }
 
       this.english = '';
       this.german = '';
       this.russian = '';
       this.randWords.shift();
-      this.shuffleLanguages();
+
       if (this.randWords.length === 0) {
         this.testOver = true;
         this.displayResults();
+      } else {
+        this.testNumber += 1;
+        this.randomizeLanguages();
       }
     },
     displayResults() {
@@ -112,28 +100,28 @@ export default {
         this.result = 'You got everything correct. Well done!';
         this.resultClass = 'success';
       } else {
-        const incorrect = this.incorrectGuesses.join(', ');
-        this.result = `<strong>You got the following words wrong:</strong> ${incorrect}`;
+        const incorrect = this.incorrectGuesses.map(guess => {
+          const incorrectInputs = guess.incorrectInputs.map(lang => `${lang}: ${guess.word[lang]}`).join(' & ');
+          return `Test ${guess.testNumber}: ${incorrectInputs}`;
+        }).join('<br>');
+        this.result = `<strong>You got the following words wrong:</strong><br>${incorrect}`;
         this.resultClass = 'error';
       }
+      this.testNumber = 1;
     },
-
-    // Dynamically show the flag icon
-    flagClass(language) {
-      return {
-        english: 'united kingdom flag',
-        german: 'germany flag',
-        russian: 'ru flag'
-      }[language];
-    },
-    capitalize(word) {
-      return word.charAt(0).toUpperCase() + word.slice(1);
+    randomizeLanguages() {
+      const languages = ['english', 'german', 'russian'];
+      this.testLanguages = [];
+      while (this.testLanguages.length < 2) {
+        const randomLang = languages[Math.floor(Math.random() * languages.length)];
+        if (!this.testLanguages.includes(randomLang)) {
+          this.testLanguages.push(randomLang);
+        }
+      }
     }
   },
-
-  // Calling shuffle on component Load
   mounted() {
-    this.shuffleLanguages();
+    this.randomizeLanguages();
   }
 };
 </script>

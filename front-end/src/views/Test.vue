@@ -1,6 +1,6 @@
 <template>
     <div>
-      <h1>Test</h1>
+      <!-- <h1>Test</h1> -->
   
       <div v-if="words.length < 5">
         <p>You need to enter at least five words to begin the test</p>
