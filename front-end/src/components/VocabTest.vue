@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1>Test {{ testNumber }}</h1>
+    <h1>Test {{ testNumber }}/{{ this.words.length }}</h1>
 
     <h2>Score: {{ score }} out of {{ this.words.length }}</h2>
 
@@ -30,6 +30,7 @@
       </div>
 
       <button class="positive ui button" :disabled="testOver">Submit</button>
+      <button v-if="testOver" class="ui button" @click="retry">Retry</button>
     </form>
 
     <p :class="['results', resultClass]">
@@ -101,13 +102,12 @@ export default {
         this.resultClass = 'success';
       } else {
         const incorrect = this.incorrectGuesses.map(guess => {
-          const incorrectInputs = guess.incorrectInputs.map(lang => `${lang}: ${guess.word[lang]}`).join(' & ');
-          return `Test ${guess.testNumber}: ${incorrectInputs}`;
+          const incorrectInputs = guess.incorrectInputs.map(lang => `${lang} [${guess.word[lang]}]`).join(', ');
+          return `Test ${guess.testNumber} - ${incorrectInputs}`;
         }).join('<br>');
         this.result = `<strong>You got the following words wrong:</strong><br>${incorrect}`;
         this.resultClass = 'error';
       }
-      this.testNumber = 1;
     },
     randomizeLanguages() {
       const languages = ['english', 'german', 'russian'];
@@ -118,6 +118,19 @@ export default {
           this.testLanguages.push(randomLang);
         }
       }
+    },
+    retry() {
+      this.randWords = [...this.words.sort(() => 0.5 - Math.random())];
+      this.incorrectGuesses = [];
+      this.result = '';
+      this.resultClass = '';
+      this.english = '';
+      this.german = '';
+      this.russian = '';
+      this.score = 0;
+      this.testOver = false;
+      this.testNumber = 1;
+      this.randomizeLanguages();
     }
   },
   mounted() {
