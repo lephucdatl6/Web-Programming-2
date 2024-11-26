@@ -3,7 +3,7 @@
         <div style="display: flex; justify-content: space-between; align-items: center;">
             <h1>Words</h1>
             <button @click="exportWords" class="ui primary button">
-                <i class="download icon"></i> Export
+                <i class="upload icon"></i> Export
             </button>
         </div>
         <table id="words" class="ui celled compact table">
