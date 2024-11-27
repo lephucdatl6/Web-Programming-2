@@ -26,7 +26,7 @@
     <div class="form-buttons">
       <button class="positive ui button" type="submit">Submit</button>
       <button type="button" class="ui primary button" @click="triggerFileInput"> <i class="download icon"></i> Import </button>
-      <input type="file" ref="fileInput" @change="onFileChange" style="display: none;"/>
+      <input type="file" ref="fileInput" @change="onFileChange" style="display: none;" accept=".csv"/>
     </div>
   </form>
 </template>
