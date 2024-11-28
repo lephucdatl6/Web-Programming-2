@@ -16,7 +16,7 @@ const VocabSchema = new Schema(
             required: 'Russian word cannont be blank'
         }
     },
-    {collection: 'vocab'}
+    {collection: 'vocab3'}
 );
 
 module.exports = mongoose.model('Vocab', VocabSchema);
