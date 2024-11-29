@@ -5,7 +5,7 @@ import New from './views/New.vue';
 import Show from './views/Show.vue';
 import Edit from './views/Edit.vue';
 import Test from './views/Test.vue';
-import AboutMe from './views/AboutMe.vue';
+import Dat from './views/Dat.vue';
 
 
 Vue.use(Router);
@@ -46,9 +46,9 @@ export default new Router({
         component: Test
       },
           {
-      path: '/aboutme',
-      name: 'aboutme',
-      component: AboutMe
+      path: '/dat',
+      name: 'dat',
+      component: Dat
     }      
   ]
 });
