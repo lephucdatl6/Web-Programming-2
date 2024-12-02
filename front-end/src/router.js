@@ -24,31 +24,30 @@ export default new Router({
       name: 'words',
       component: Words
     },
-
     {
-        path: '/words/new',
-        name: 'new-word',
-        component: New
-      },
-      {
-        path: '/words/:id',
-        name: 'show',
-        component: Show
-      },
-      {
-        path: '/words/:id/edit',
-        name: 'edit',
-        component: Edit
-      },
-      {
-        path: '/test',
-        name: 'test',
-        component: Test
-      },
-          {
-      path: '/dat',
-      name: 'dat',
-      component: Dat
+      path: '/words/new',
+      name: 'new-word',
+      component: New
+    },
+    {
+      path: '/words/:id',
+      name: 'show',
+      component: Show
+    },
+    {
+      path: '/words/:id/edit',
+      name: 'edit',
+      component: Edit
+    },
+    {
+      path: '/test',
+      name: 'test',
+      component: Test
+    },
+    {
+    path: '/dat',
+    name: 'dat',
+    component: Dat
     }      
   ]
 });
