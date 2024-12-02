@@ -1,30 +1,3 @@
-// // const bodyParser = require('body-parser');
-// // var express = require('express');
-// // const { default: mongoose } = require('mongoose');
-
-// var express = require('express');
-//   app = express(),
-//   port = process.env.PORT || 3000;
-//   mongoose = require ('mongoose'),
-//   Vocab = require('./api/models/vocabModel')
-//   bodyParser = require('body-parser')
-
-// // mongoose instance connection url connection
-// mongoose.Promise = global.Promise;
-// mongoose.connect('mongodb+srv://lephucdat2004:userid@listapi.lhf2x.mongodb.net/?retryWrites=true&w=majority&appName=LISTAPI')
-
-// app.use(bodyParser.urlencoded({ extended: true }));
-// app.use(bodyParser.json());
-
-// const route = require('./api/router/vocabRouters')
-
-// route(app);
-
-// app.listen(port);
-
-// console.log("vocab RESTful API server started on: " + port)
-
-
 const express = require ('express');
 const cors = require('cors');
 const mongoose = require('mongoose');
