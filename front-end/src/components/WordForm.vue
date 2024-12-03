@@ -72,7 +72,7 @@ export default {
         this.$emit('createOrUpdate', this.word);
       }
     },
-    // Handles file input change (CSV file)
+    // // Handles file input change (CSV file)
     async onFileChange(event) {
       const file = event.target.files[0]; // Get the selected file
       if (!file) return; // Return if no file was selected
@@ -81,20 +81,35 @@ export default {
       const rows = text.split('\n').filter(row => row.trim() !== ''); // Split into rows and remove empty lines
       const headerRemoved = rows.slice(1); // Remove header row
 
+      // Track incomplete entries
+      const incompleteEntries = [];
+
       // Process each row and map to word object with trimmed values
-      const words = headerRemoved.map((row) => {
+      const words = headerRemoved.map((row, index) => {
         const [english, german, russian] = row.split(',');
-        return {
+        const word = {
           english: english ? english.trim() : '',
           german: german ? german.trim() : '',
           russian: russian ? russian.trim() : '',
         };
-      }).filter(word => word.english || word.german || word.russian);  // Filter out incomplete word entries
+
+        // Check for missing fields
+        if (!word.english || !word.german || !word.russian) {
+          incompleteEntries.push(`Row ${index + 2}`); // Add row number to list of incomplete entries
+        }
+        return word;
+      }).filter(word => word.english || word.german || word.russian); // Filter out empty entries
+
+      // If there are incomplete entries, show a warning
+      if (incompleteEntries.length > 0) {
+        alert(`Warning: Missing data in the following rows:\n${incompleteEntries.join(', ')}`);
+        return; // skip confirmation if there are missing entries
+      }
 
       const wordCount = words.length;
 
-      // Ask for confirmation before importing
-      const userConfirmed = window.confirm(`You are about to import ${wordCount} words. Do you want to proceed?`);
+      // Ask for confirmation before importing if no missing data
+      const userConfirmed = window.confirm(`You are about to import ${wordCount} complete words. Do you want to proceed?`);
 
       if (userConfirmed) {
         this.$emit('importFile', words);
@@ -102,6 +117,8 @@ export default {
         this.flash('Import canceled.', 'warning');
       }
     },
+
+
     // Triggers file input click
     triggerFileInput() {
       this.$refs.fileInput.click();
