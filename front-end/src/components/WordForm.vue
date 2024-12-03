@@ -68,7 +68,6 @@ export default {
       ) {
         this.errorsPresent = true;
       } else {
-        // Emit event with word data if all fields are filled
         this.$emit('createOrUpdate', this.word);
       }
     },
@@ -117,7 +116,6 @@ export default {
         this.flash('Import canceled.', 'warning');
       }
     },
-
 
     // Triggers file input click
     triggerFileInput() {
