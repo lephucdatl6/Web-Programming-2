@@ -1,6 +1,6 @@
 <template>
   <form action="#" @submit.prevent="onSubmit">
-    <p v-if="errorsPresent" class="error">Please fill out three fields!</p>
+    <!-- <p v-if="errorsPresent" class="error">Please fill out three fields!</p> -->
 
     <!-- Input field for English word -->
     <div class="ui labeled input fluid">
@@ -53,7 +53,7 @@ export default {
     },
     showImportButton: {
       type: Boolean,
-      default: true, // Default is true for other contexts
+      default: true, 
     },
   },
   data() {
@@ -71,7 +71,9 @@ export default {
         this.word.russian === ''
       ) {
         this.errorsPresent = true;
+        alert('Please fill out all three fields!');
       } else {
+        this.errorsPresent = false;
         this.$emit('createOrUpdate', this.word);
       }
     },
