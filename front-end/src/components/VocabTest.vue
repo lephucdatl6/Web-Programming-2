@@ -127,12 +127,13 @@ export default {
     },
     // Randomly select two languages for the test
     randomizeLanguages() {
-      const languages = ['english', 'german', 'russian'];
+      const languages = ['english', 'german', 'russian'];  // List of languages
       this.testLanguages = [];
-      while (this.testLanguages.length < 2) {
-        const randomLang = languages[Math.floor(Math.random() * languages.length)];
-        if (!this.testLanguages.includes(randomLang)) {
-          this.testLanguages.push(randomLang);
+
+      while (this.testLanguages.length < 2) {  // Select two languages
+        const randomLang = languages[Math.floor(Math.random() * languages.length)];  // Randomly select a language
+        if (!this.testLanguages.includes(randomLang)) {  // Check if the language is already selected too avoid duplicates
+          this.testLanguages.push(randomLang);  // Add the language to the testLanguages array
         }
       }
     },

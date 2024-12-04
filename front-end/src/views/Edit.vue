@@ -1,7 +1,11 @@
 <template>
     <div>
         <h1>Edit Word</h1>
-        <word-form @createOrUpdate ='createrOrUpdate':word=this.word></word-form>
+        <word-form 
+        @createOrUpdate ='createrOrUpdate'
+        :word=this.word
+        :showImportButton="false"
+        ></word-form>
     </div>
 </template>
 

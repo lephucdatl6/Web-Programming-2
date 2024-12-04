@@ -31,7 +31,7 @@
       <!-- Submit button -->
       <button class="positive ui button" type="submit"><i class="check icon"></i> Submit</button>
       <!-- Import Button -->
-      <button type="button" class="ui primary button" @click="triggerFileInput"> <i class="download icon"></i> Import </button>
+      <button v-if="showImportButton" type="button" class="ui primary button" @click="triggerFileInput"> <i class="download icon"></i> Import </button>
       <!-- Hidden file input for CSV file import -->
       <input type="file" ref="fileInput" @change="onFileChange" style="display: none;" accept=".csv"/>
     </div>
@@ -50,6 +50,10 @@ export default {
         german: '',
         russian: '',
       }),
+    },
+    showImportButton: {
+      type: Boolean,
+      default: true, // Default is true for other contexts
     },
   },
   data() {
@@ -101,7 +105,7 @@ export default {
 
       // If there are incomplete entries, show a warning
       if (incompleteEntries.length > 0) {
-        alert(`Warning: Missing data in the following rows:\n${incompleteEntries.join(', ')}`);
+        alert(`Warning: Missing words detected in rows:\n[${incompleteEntries.join(', ')}]`);
         return; // skip confirmation if there are missing entries
       }
 
